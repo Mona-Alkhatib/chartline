@@ -109,7 +109,7 @@ class ChartGenerator:
         )
         messages: list[dict] = [{"role": "user", "content": base_content}]
         last_error: str | None = None
-        for attempt in range(self.max_retries + 1):
+        for _ in range(self.max_retries + 1):
             response = self.client.messages.create(
                 model=model, system=system_blocks, messages=messages,
                 max_tokens=_MAX_TOKENS,
@@ -121,11 +121,13 @@ class ChartGenerator:
                 sqlglot.parse_one(sql)
             except Exception as e:
                 last_error = f"SQL parse error: {e}"
+                retry_msg = f"That didn't parse: {last_error}. Return only valid SQL."
                 messages = [
                     {"role": "user", "content": base_content},
                     {"role": "assistant", "content": sql},
-                    {"role": "user", "content": f"That didn't parse: {last_error}. Return only valid SQL."},
+                    {"role": "user", "content": retry_msg},
                 ]
                 continue
             return sql
-        raise ValueError(f"SQL generation failed after {self.max_retries + 1} attempts: {last_error}")
+        error_msg = f"SQL generation failed after {self.max_retries + 1} attempts: {last_error}"
+        raise ValueError(error_msg)

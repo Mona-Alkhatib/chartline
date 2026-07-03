@@ -34,7 +34,8 @@ def _fake_client(responses: list[str]) -> MagicMock:
         msg.model = kwargs["model"]
         return msg
 
-    client.messages.create = messages_create
+    mock_create = MagicMock(side_effect=messages_create)
+    client.messages.create = mock_create
     return client
 
 
@@ -58,4 +59,4 @@ def test_text_to_sql_uses_opus():
     fake = _fake_client([sql])
     gen = ChartGenerator(Router(), Validator(), fake)
     gen.text_to_sql("q", _schema())
-    _ = MODEL_OPUS
+    assert fake.messages.create.call_args.kwargs["model"] == MODEL_OPUS
