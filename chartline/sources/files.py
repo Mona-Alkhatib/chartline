@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from analyst.models_types import SchemaSummary
-from analyst.schema import summarize_dataframe
+from chartline.models_types import SchemaSummary
+from chartline.schema import summarize_dataframe
 
 _LOADERS: dict[str, callable] = {
     ".csv": pd.read_csv,

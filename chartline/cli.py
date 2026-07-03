@@ -9,8 +9,8 @@ from typing import Annotated
 
 import typer
 
-import analyst
-from analyst.store import SpecStore
+import chartline
+from chartline.store import SpecStore
 
 app = typer.Typer(add_completion=False, help="Chartline — natural-language chart generation.")
 
@@ -23,7 +23,7 @@ def _store_path() -> Path:
 @app.command()
 def version() -> None:
     """Print the Chartline version."""
-    typer.echo(f"chartline {analyst.__version__}")
+    typer.echo(f"chartline {chartline.__version__}")
 
 
 @app.command("list-sessions")
@@ -52,7 +52,7 @@ def export(session_id: str, out: Annotated[Path, typer.Option(..., "--out")]) ->
 @app.command()
 def serve(port: int = 8501) -> None:
     """Launch the Streamlit web app."""
-    entry = Path(__file__).parent.parent / "ui" / "streamlit_app.py"
+    entry = Path(__file__).parent / "ui" / "streamlit_app.py"
     subprocess.run(
         [sys.executable, "-m", "streamlit", "run", str(entry), "--server.port", str(port)],
         check=False,

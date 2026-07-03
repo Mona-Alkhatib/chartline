@@ -5,9 +5,9 @@ from typing import Any
 
 import sqlglot
 
-from analyst.models_types import GenerationResult, SchemaSummary, VegaLiteSpec
-from analyst.router import Router
-from analyst.validator import Validator
+from chartline.models_types import GenerationResult, SchemaSummary, VegaLiteSpec
+from chartline.router import Router
+from chartline.validator import Validator
 
 _MAX_TOKENS = 2000
 

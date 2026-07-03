@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from analyst.models_types import SchemaSummary
+from chartline.models_types import SchemaSummary
 
 
 @runtime_checkable

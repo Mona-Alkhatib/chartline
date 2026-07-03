@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 from pandas.api.types import is_datetime64_any_dtype, is_numeric_dtype
 
-from analyst.models_types import ColumnSummary, DType, TableSummary
+from chartline.models_types import ColumnSummary, DType, TableSummary
 
 _CATEGORICAL_CARDINALITY_MAX = 50
 

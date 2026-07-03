@@ -10,14 +10,14 @@ import streamlit as st
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
-from analyst.exporter import to_altair, to_plotly
-from analyst.generator import ChartGenerator
-from analyst.renderer import render_streamlit
-from analyst.router import Router
-from analyst.session import Session
-from analyst.sources.files import FileSource
-from analyst.store import SpecStore
-from analyst.validator import Validator
+from chartline.exporter import to_altair, to_plotly
+from chartline.generator import ChartGenerator
+from chartline.renderer import render_streamlit
+from chartline.router import Router
+from chartline.session import Session
+from chartline.sources.files import FileSource
+from chartline.store import SpecStore
+from chartline.validator import Validator
 
 load_dotenv()
 

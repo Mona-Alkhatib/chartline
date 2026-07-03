@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from analyst.models_types import VegaLiteSpec
+from chartline.models_types import VegaLiteSpec
 
 _ALTAIR_MARKS = {
     "bar": "mark_bar", "line": "mark_line", "area": "mark_area",

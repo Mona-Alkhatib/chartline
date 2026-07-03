@@ -3,8 +3,8 @@ from __future__ import annotations
 import pandas as pd
 import sqlalchemy as sa
 
-from analyst.models_types import SchemaSummary, TableSummary
-from analyst.schema import summarize_dataframe
+from chartline.models_types import SchemaSummary, TableSummary
+from chartline.schema import summarize_dataframe
 
 _SAMPLE_ROWS = 500
 

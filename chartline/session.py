@@ -5,10 +5,10 @@ from typing import Self
 
 import pandas as pd
 
-from analyst.generator import ChartGenerator
-from analyst.models_types import SchemaSummary, VegaLiteSpec
-from analyst.sources.base import DataSource
-from analyst.store import SpecStore
+from chartline.generator import ChartGenerator
+from chartline.models_types import SchemaSummary, VegaLiteSpec
+from chartline.sources.base import DataSource
+from chartline.store import SpecStore
 
 
 class Session:

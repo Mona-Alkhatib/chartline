@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from analyst.models_types import SchemaSummary, ValidationResult
+from chartline.models_types import SchemaSummary, ValidationResult
 
 _SUPPORTED_MARKS = {
     "bar", "line", "area", "point", "circle", "square", "tick", "rect",

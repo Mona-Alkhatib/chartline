@@ -6,7 +6,7 @@ from string import Template
 import anywidget
 import traitlets
 
-from analyst.models_types import VegaLiteSpec
+from chartline.models_types import VegaLiteSpec
 
 _HTML_TEMPLATE = Template("""<!doctype html>
 <html>

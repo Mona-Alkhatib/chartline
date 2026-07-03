@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Self
 
-from analyst.models_types import SavedSpec, SessionRecord, VegaLiteSpec
+from chartline.models_types import SavedSpec, SessionRecord, VegaLiteSpec
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS sessions (
