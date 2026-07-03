@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 
 from analyst.exporter import to_altair, to_plotly
 from analyst.generator import ChartGenerator
-from analyst.models_types import VegaLiteSpec
 from analyst.renderer import render_streamlit
 from analyst.router import Router
 from analyst.session import Session
@@ -40,10 +39,10 @@ def _init_state() -> None:
 
 def _load_source(uploaded) -> tuple[FileSource, pd.DataFrame]:
     suffix = Path(uploaded.name).suffix
-    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
-    tmp.write(uploaded.getbuffer())
-    tmp.close()
-    source = FileSource(Path(tmp.name))
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+        tmp.write(uploaded.getbuffer())
+        tmp_path = tmp.name
+    source = FileSource(Path(tmp_path))
     return source, source.load()
 
 
@@ -88,11 +87,11 @@ def main() -> None:
         prompt = st.chat_input("Describe or refine a chart")
         if prompt and session is not None:
             st.session_state.history.append({"role": "user", "text": prompt})
-            if session.current_spec is None:
-                spec = session.ask(prompt)
-            else:
-                spec = session.refine(prompt)
-            st.session_state.history.append({"role": "assistant", "text": f"Updated. mark={spec.spec.get('mark')}"})
+            spec = session.ask(prompt) if session.current_spec is None else session.refine(prompt)
+            marker = spec.spec.get("mark")
+            st.session_state.history.append(
+                {"role": "assistant", "text": f"Updated. mark={marker}"}
+            )
             st.rerun()
 
         st.divider()
