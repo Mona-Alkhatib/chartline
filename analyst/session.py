@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Self
 
 import pandas as pd
@@ -9,7 +8,6 @@ import pandas as pd
 from analyst.generator import ChartGenerator
 from analyst.models_types import SchemaSummary, VegaLiteSpec
 from analyst.sources.base import DataSource
-from analyst.sources.files import FileSource
 from analyst.store import SpecStore
 
 
