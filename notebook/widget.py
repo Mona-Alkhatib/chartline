@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import atexit
 import os
 from pathlib import Path
 from typing import Any, Self
@@ -28,6 +29,8 @@ class NotebookSession:
     def __init__(self, session: Session, store: SpecStore) -> None:
         self.session = session
         self._store = store
+        self._closed = False
+        atexit.register(self.close)
 
     @classmethod
     def from_file(
@@ -62,4 +65,10 @@ class NotebookSession:
         return render_widget(spec)
 
     def close(self) -> None:
-        self._store.__exit__(None, None, None)
+        if self._closed:
+            return
+        self._closed = True
+        try:
+            self._store.__exit__(None, None, None)
+        except Exception:
+            pass
