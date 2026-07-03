@@ -1,0 +1,122 @@
+[
+  {
+    "id": "log-scale-y",
+    "starting_spec": {"mark": "line", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "log-scale the y-axis",
+    "assertion": {"kind": "path_equals", "path": "encoding.y.scale.type", "value": "log"}
+  },
+  {
+    "id": "line-to-bar",
+    "starting_spec": {"mark": "line", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "make it a bar chart",
+    "assertion": {"kind": "mark_type", "value": "bar"}
+  },
+  {
+    "id": "add-color-by-region",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "product", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "split by region using color",
+    "assertion": {"kind": "path_exists", "path": "encoding.color"}
+  },
+  {
+    "id": "add-title",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "add the title 'Weekly Metrics'",
+    "assertion": {"kind": "title_equals", "value": "Weekly Metrics"}
+  },
+  {
+    "id": "sort-descending",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "sort the bars descending by revenue",
+    "assertion": {"kind": "path_exists", "path": "encoding.x.sort"}
+  },
+  {
+    "id": "bar-to-line",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "line chart instead",
+    "assertion": {"kind": "mark_type", "value": "line"}
+  },
+  {
+    "id": "point-to-scatter",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "units", "type": "quantitative"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "make it a scatter plot",
+    "assertion": {"kind": "mark_type", "value": "point"}
+  },
+  {
+    "id": "color-by-product",
+    "starting_spec": {"mark": "point", "encoding": {"x": {"field": "units", "type": "quantitative"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "color the points by product",
+    "assertion": {"kind": "path_exists", "path": "encoding.color"}
+  },
+  {
+    "id": "log-scale-x",
+    "starting_spec": {"mark": "point", "encoding": {"x": {"field": "units", "type": "quantitative"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "log-scale the x-axis",
+    "assertion": {"kind": "path_equals", "path": "encoding.x.scale.type", "value": "log"}
+  },
+  {
+    "id": "aggregate-mean",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "show average revenue instead of sum",
+    "assertion": {"kind": "path_equals", "path": "encoding.y.aggregate", "value": "mean"}
+  },
+  {
+    "id": "temporal-month",
+    "starting_spec": {"mark": "line", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "aggregate by month",
+    "assertion": {"kind": "path_equals", "path": "encoding.x.timeUnit", "value": "yearmonth"}
+  },
+  {
+    "id": "add-tooltip",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "add a tooltip showing revenue",
+    "assertion": {"kind": "path_exists", "path": "encoding.tooltip"}
+  },
+  {
+    "id": "add-axis-title-y",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "label the y-axis 'Revenue (USD)'",
+    "assertion": {"kind": "path_equals", "path": "encoding.y.title", "value": "Revenue (USD)"}
+  },
+  {
+    "id": "swap-axes",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "flip x and y so it's a horizontal bar chart",
+    "assertion": {"kind": "path_equals", "path": "encoding.x.field", "value": "revenue"}
+  },
+  {
+    "id": "filter-region-na",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "product", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "only show NA region",
+    "assertion": {"kind": "path_exists", "path": "transform"}
+  },
+  {
+    "id": "stacked-to-grouped",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "product", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}, "color": {"field": "region", "type": "nominal"}}},
+    "refinement_ask": "make it a grouped bar chart instead of stacked",
+    "assertion": {"kind": "path_equals", "path": "encoding.xOffset.field", "value": "region"}
+  },
+  {
+    "id": "hide-legend",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "product", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}, "color": {"field": "region", "type": "nominal"}}},
+    "refinement_ask": "hide the legend",
+    "assertion": {"kind": "path_equals", "path": "encoding.color.legend", "value": null}
+  },
+  {
+    "id": "add-mean-rule",
+    "starting_spec": {"mark": "bar", "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "add a horizontal line at the mean revenue",
+    "assertion": {"kind": "path_exists", "path": "layer"}
+  },
+  {
+    "id": "area-fill-opacity",
+    "starting_spec": {"mark": "area", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "make the area 50% transparent",
+    "assertion": {"kind": "path_equals", "path": "mark.opacity", "value": 0.5}
+  },
+  {
+    "id": "temporal-week",
+    "starting_spec": {"mark": "line", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "revenue", "type": "quantitative"}}},
+    "refinement_ask": "aggregate by week",
+    "assertion": {"kind": "path_equals", "path": "encoding.x.timeUnit", "value": "yearweek"}
+  }
+]
