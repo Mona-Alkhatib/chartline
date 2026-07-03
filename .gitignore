@@ -1,0 +1,25 @@
+docs/internal/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# uv / venv
+.venv/
+uv.lock
+
+# Local data
+.env
+.chartline/
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
