@@ -43,6 +43,19 @@ def test_rejects_missing_mark():
     spec = {"encoding": {"x": {"field": "region", "type": "nominal"}}}
     r = v.validate(spec, _schema())
     assert not r.valid
+    assert r.error is not None
+    assert "mark" in r.error
+
+
+def test_rejects_unsupported_mark():
+    v = Validator()
+    spec = {
+        "mark": "sankey",
+        "encoding": {"x": {"field": "region", "type": "nominal"}},
+    }
+    r = v.validate(spec, _schema())
+    assert not r.valid
+    assert "Unsupported mark" in r.error
 
 
 def test_rejects_non_dict():
