@@ -22,6 +22,7 @@ dependencies = [
     "sqlglot>=25",
     "openpyxl>=3.1",
     "requests>=2.31",
+    "duckdb-engine>=0.17.0",
 ]
 
 [project.scripts]
