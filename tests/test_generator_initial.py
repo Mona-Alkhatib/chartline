@@ -1,4 +1,3 @@
-import json
 from unittest.mock import MagicMock
 
 from analyst.generator import ChartGenerator
