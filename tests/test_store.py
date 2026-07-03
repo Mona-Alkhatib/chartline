@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from analyst.models_types import VegaLiteSpec
-from analyst.store import SpecStore
+from chartline.models_types import VegaLiteSpec
+from chartline.store import SpecStore
 
 
 def _store(tmp_path: Path) -> SpecStore:

@@ -6,10 +6,10 @@ import pytest
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
-from analyst.generator import ChartGenerator
-from analyst.models_types import VegaLiteSpec
-from analyst.router import Router
-from analyst.validator import Validator
+from chartline.generator import ChartGenerator
+from chartline.models_types import VegaLiteSpec
+from chartline.router import Router
+from chartline.validator import Validator
 
 load_dotenv()
 

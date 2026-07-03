@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 
-from notebook.widget import NotebookSession
+from chartline.notebook.widget import NotebookSession
 
 
 def _fake_client(bodies):

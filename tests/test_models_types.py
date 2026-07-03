@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 from pydantic import ValidationError
 
-from analyst.models_types import (
+from chartline.models_types import (
     ColumnSummary,
     GenerationResult,
     SavedSpec,

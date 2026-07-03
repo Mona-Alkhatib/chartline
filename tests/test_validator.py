@@ -1,5 +1,5 @@
-from analyst.models_types import ColumnSummary, SchemaSummary, TableSummary
-from analyst.validator import Validator
+from chartline.models_types import ColumnSummary, SchemaSummary, TableSummary
+from chartline.validator import Validator
 
 
 def _schema() -> SchemaSummary:

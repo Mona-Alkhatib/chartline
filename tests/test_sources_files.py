@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from analyst.sources.files import FileSource
+from chartline.sources.files import FileSource
 
 
 def _write_csv(tmp_path: Path) -> Path:

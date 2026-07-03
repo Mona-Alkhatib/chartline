@@ -2,12 +2,12 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 
-from analyst.generator import ChartGenerator
-from analyst.router import Router
-from analyst.session import Session
-from analyst.sources.files import FileSource
-from analyst.store import SpecStore
-from analyst.validator import Validator
+from chartline.generator import ChartGenerator
+from chartline.router import Router
+from chartline.session import Session
+from chartline.sources.files import FileSource
+from chartline.store import SpecStore
+from chartline.validator import Validator
 
 
 def _fake_client(responses):

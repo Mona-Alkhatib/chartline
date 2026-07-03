@@ -1,6 +1,6 @@
 import pytest
 
-from analyst.router import MODEL_OPUS, MODEL_SONNET, Router
+from chartline.router import MODEL_OPUS, MODEL_SONNET, Router
 
 
 def test_model_for_initial_is_opus():

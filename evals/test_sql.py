@@ -6,10 +6,10 @@ import pytest
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
-from analyst.generator import ChartGenerator
-from analyst.router import Router
-from analyst.sources.warehouse import WarehouseSource
-from analyst.validator import Validator
+from chartline.generator import ChartGenerator
+from chartline.router import Router
+from chartline.sources.warehouse import WarehouseSource
+from chartline.validator import Validator
 
 load_dotenv()
 

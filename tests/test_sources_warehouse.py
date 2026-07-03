@@ -2,7 +2,7 @@ import duckdb
 import pandas
 import pytest
 
-from analyst.sources.warehouse import WarehouseSource
+from chartline.sources.warehouse import WarehouseSource
 
 
 @pytest.fixture

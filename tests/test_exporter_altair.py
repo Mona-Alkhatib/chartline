@@ -1,5 +1,5 @@
-from analyst.exporter import to_altair
-from analyst.models_types import VegaLiteSpec
+from chartline.exporter import to_altair
+from chartline.models_types import VegaLiteSpec
 
 
 def test_altair_bar_chart_compiles():

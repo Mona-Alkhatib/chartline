@@ -1,9 +1,9 @@
 from unittest.mock import MagicMock
 
-from analyst.generator import ChartGenerator
-from analyst.models_types import ColumnSummary, SchemaSummary, TableSummary, VegaLiteSpec
-from analyst.router import MODEL_SONNET, Router
-from analyst.validator import Validator
+from chartline.generator import ChartGenerator
+from chartline.models_types import ColumnSummary, SchemaSummary, TableSummary, VegaLiteSpec
+from chartline.router import MODEL_SONNET, Router
+from chartline.validator import Validator
 
 
 def _schema() -> SchemaSummary:

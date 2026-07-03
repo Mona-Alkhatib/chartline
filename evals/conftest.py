@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from analyst.sources.files import FileSource
-from analyst.validator import Validator
+from chartline.sources.files import FileSource
+from chartline.validator import Validator
 
 _FIXTURES = Path(__file__).parent / "fixtures"
 

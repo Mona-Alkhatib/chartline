@@ -2,9 +2,9 @@ import json
 
 from typer.testing import CliRunner
 
-from analyst.cli import app
-from analyst.models_types import VegaLiteSpec
-from analyst.store import SpecStore
+from chartline.cli import app
+from chartline.models_types import VegaLiteSpec
+from chartline.store import SpecStore
 
 runner = CliRunner()
 

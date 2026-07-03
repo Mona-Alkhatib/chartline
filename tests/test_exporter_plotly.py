@@ -1,5 +1,5 @@
-from analyst.exporter import to_plotly
-from analyst.models_types import VegaLiteSpec
+from chartline.exporter import to_plotly
+from chartline.models_types import VegaLiteSpec
 
 
 def test_plotly_bar():

@@ -1,18 +1,19 @@
 from __future__ import annotations
 
 import atexit
+import contextlib
 import os
 from pathlib import Path
 from typing import Any, Self
 
-from analyst.generator import ChartGenerator
-from analyst.renderer import render_widget
-from analyst.router import Router
-from analyst.session import Session
-from analyst.sources.files import FileSource
-from analyst.sources.warehouse import WarehouseSource
-from analyst.store import SpecStore
-from analyst.validator import Validator
+from chartline.generator import ChartGenerator
+from chartline.renderer import render_widget
+from chartline.router import Router
+from chartline.session import Session
+from chartline.sources.files import FileSource
+from chartline.sources.warehouse import WarehouseSource
+from chartline.store import SpecStore
+from chartline.validator import Validator
 
 
 def _default_store_path() -> Path:
@@ -68,7 +69,5 @@ class NotebookSession:
         if self._closed:
             return
         self._closed = True
-        try:
+        with contextlib.suppress(Exception):
             self._store.__exit__(None, None, None)
-        except Exception:
-            pass

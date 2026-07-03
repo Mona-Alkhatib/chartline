@@ -1,6 +1,6 @@
 import pandas as pd
 
-from analyst.schema import infer_dtype, summarize_dataframe
+from chartline.schema import infer_dtype, summarize_dataframe
 
 
 def test_infer_dtype_numeric():

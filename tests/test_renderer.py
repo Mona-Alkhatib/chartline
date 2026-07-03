@@ -1,5 +1,5 @@
-from analyst.models_types import VegaLiteSpec
-from analyst.renderer import render_html, render_widget
+from chartline.models_types import VegaLiteSpec
+from chartline.renderer import render_html, render_widget
 
 
 def test_render_html_embeds_spec():
