@@ -30,7 +30,10 @@ def test_plotly_line():
 def test_plotly_code_compiles():
     spec = VegaLiteSpec(spec={
         "mark": "bar",
-        "encoding": {"x": {"field": "region", "type": "nominal"}, "y": {"field": "rev", "type": "quantitative"}},
+        "encoding": {
+            "x": {"field": "region", "type": "nominal"},
+            "y": {"field": "rev", "type": "quantitative"},
+        },
     })
     compile(to_plotly(spec), "<test>", "exec")
 
