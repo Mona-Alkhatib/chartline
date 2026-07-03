@@ -5,6 +5,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Annotated
 
 import typer
 
@@ -35,7 +36,7 @@ def list_sessions() -> None:
 
 
 @app.command()
-def export(session_id: str, out: Path = typer.Option(..., "--out")) -> None:
+def export(session_id: str, out: Annotated[Path, typer.Option(..., "--out")]) -> None:
     """Export a session (metadata + all specs) to a JSON file."""
     with SpecStore(_store_path()) as store:
         sess = store.get_session(session_id)

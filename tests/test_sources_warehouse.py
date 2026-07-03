@@ -1,5 +1,5 @@
 import duckdb
-import pandas as pd
+import pandas
 import pytest
 
 from analyst.sources.warehouse import WarehouseSource
@@ -40,5 +40,5 @@ def test_warehouse_ref_is_name(warehouse):
 
 
 def test_warehouse_execute_invalid_sql(warehouse):
-    with pytest.raises(Exception):
+    with pytest.raises(pandas.errors.DatabaseError):
         warehouse.execute("SELECT * FROM nowhere")

@@ -33,12 +33,12 @@ def to_altair(spec: VegaLiteSpec, dataframe_var: str = "df") -> str:
     return "\n".join([
         "import altair as alt",
         "",
-        f"chart = (",
+        "chart = (",
         f"    alt.Chart({dataframe_var})",
         f"    .{altair_mark}()",
         f"    .encode({encoding_str})",
         *(f"    .properties({p})" for p in props),
-        f")",
+        ")",
     ])
 
 

@@ -3,7 +3,6 @@ from unittest.mock import MagicMock
 import pandas as pd
 
 from analyst.generator import ChartGenerator
-from analyst.models_types import VegaLiteSpec
 from analyst.router import Router
 from analyst.session import Session
 from analyst.sources.files import FileSource

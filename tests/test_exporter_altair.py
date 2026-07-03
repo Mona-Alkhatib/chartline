@@ -1,5 +1,3 @@
-import altair as alt
-
 from analyst.exporter import to_altair
 from analyst.models_types import VegaLiteSpec
 
