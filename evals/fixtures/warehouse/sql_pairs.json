@@ -1,0 +1,17 @@
+[
+  {"id": "count-users", "question": "how many users are there?", "expected_columns": 1, "min_rows": 1, "max_rows": 1},
+  {"id": "count-orders", "question": "how many orders in total?", "expected_columns": 1, "min_rows": 1, "max_rows": 1},
+  {"id": "total-amount", "question": "what is the total order amount?", "expected_columns": 1, "min_rows": 1, "max_rows": 1},
+  {"id": "orders-by-region", "question": "how many orders per region?", "expected_columns": 2, "min_rows": 3, "max_rows": 3},
+  {"id": "revenue-by-product", "question": "total revenue by product name", "expected_columns": 2, "min_rows": 3, "max_rows": 3},
+  {"id": "orders-by-month", "question": "count of orders per month in 2026", "expected_columns": 2, "min_rows": 3, "max_rows": 3},
+  {"id": "top-user-by-amount", "question": "which user spent the most?", "expected_columns": 2, "min_rows": 1, "max_rows": 1},
+  {"id": "avg-order-amount", "question": "average order amount", "expected_columns": 1, "min_rows": 1, "max_rows": 1},
+  {"id": "users-in-eu", "question": "list users in the EU region", "expected_columns": 3, "min_rows": 2, "max_rows": 2},
+  {"id": "hardware-revenue", "question": "total revenue for hardware category products", "expected_columns": 1, "min_rows": 1, "max_rows": 1},
+  {"id": "users-with-no-orders", "question": "which users have not placed any orders?", "expected_columns": 3, "min_rows": 0, "max_rows": 5},
+  {"id": "max-order-per-user", "question": "the largest single order amount for each user", "expected_columns": 2, "min_rows": 5, "max_rows": 5},
+  {"id": "revenue-by-region", "question": "total revenue by region", "expected_columns": 2, "min_rows": 3, "max_rows": 3},
+  {"id": "widget-orders", "question": "list all orders for the Widget product with order date", "expected_columns": 2, "min_rows": 3, "max_rows": 3},
+  {"id": "avg-by-category", "question": "average order amount by product category", "expected_columns": 2, "min_rows": 2, "max_rows": 2}
+]
