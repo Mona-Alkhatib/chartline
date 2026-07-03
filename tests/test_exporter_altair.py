@@ -46,3 +46,23 @@ def test_altair_code_is_valid_python():
     })
     code = to_altair(spec)
     compile(code, "<test>", "exec")
+
+
+def test_altair_mark_as_dict():
+    spec = VegaLiteSpec(spec={
+        "mark": {"type": "line", "opacity": 0.5},
+        "encoding": {"x": {"field": "month", "type": "temporal"}},
+    })
+    code = to_altair(spec)
+    assert "mark_line" in code
+
+
+def test_altair_with_title_emits_properties():
+    spec = VegaLiteSpec(spec={
+        "mark": "bar",
+        "encoding": {"x": {"field": "region", "type": "nominal"}},
+        "title": "Weekly Revenue",
+    })
+    code = to_altair(spec)
+    assert ".properties(" in code
+    assert "Weekly Revenue" in code
