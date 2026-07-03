@@ -40,3 +40,36 @@ def to_altair(spec: VegaLiteSpec, dataframe_var: str = "df") -> str:
         *(f"    .properties({p})" for p in props),
         f")",
     ])
+
+
+_PLOTLY_FNS = {
+    "bar": "bar", "line": "line", "area": "area",
+    "point": "scatter", "circle": "scatter", "square": "scatter",
+    "boxplot": "box", "arc": "pie", "text": "scatter", "rect": "density_heatmap",
+    "tick": "scatter", "rule": "line",
+}
+
+
+def to_plotly(spec: VegaLiteSpec, dataframe_var: str = "df") -> str:
+    s = spec.spec
+    mark = s.get("mark")
+    mark_type = mark.get("type") if isinstance(mark, dict) else mark
+    fn = _PLOTLY_FNS.get(str(mark_type), "bar")
+
+    encoding = s.get("encoding") or {}
+    kwargs: list[str] = [f"{dataframe_var}"]
+    channel_map = {"x": "x", "y": "y", "color": "color", "size": "size", "shape": "symbol"}
+    for channel, key in channel_map.items():
+        definition = encoding.get(channel)
+        if isinstance(definition, dict) and isinstance(definition.get("field"), str):
+            kwargs.append(f"{key}={definition['field']!r}")
+
+    title = s.get("title")
+    if isinstance(title, str):
+        kwargs.append(f"title={title!r}")
+
+    return "\n".join([
+        "import plotly.express as px",
+        "",
+        f"fig = px.{fn}({', '.join(kwargs)})",
+    ])
