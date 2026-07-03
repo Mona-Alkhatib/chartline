@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
+import sqlglot
+
 from analyst.models_types import GenerationResult, SchemaSummary, VegaLiteSpec
 from analyst.router import Router
 from analyst.validator import Validator
@@ -96,3 +98,34 @@ class ChartGenerator:
             f"User refinement: {user_ask}\n\n"
             f"Return the modified Vega-Lite v5 JSON spec. JSON only, starting with {{."
         )
+
+    def text_to_sql(self, user_ask: str, schema: SchemaSummary) -> str:
+        model = self.router.model_for("sql")
+        system_blocks = self.router.system_blocks("sql")
+        base_content = (
+            f"Warehouse schema:\n{schema.to_prompt_text()}\n\n"
+            f"Question: {user_ask}\n\n"
+            f"Return only the SQL statement."
+        )
+        messages: list[dict] = [{"role": "user", "content": base_content}]
+        last_error: str | None = None
+        for attempt in range(self.max_retries + 1):
+            response = self.client.messages.create(
+                model=model, system=system_blocks, messages=messages,
+                max_tokens=_MAX_TOKENS,
+            )
+            sql = self._extract_text(response).strip().strip("`").strip()
+            if sql.startswith("sql\n"):
+                sql = sql[4:]
+            try:
+                sqlglot.parse_one(sql)
+            except Exception as e:
+                last_error = f"SQL parse error: {e}"
+                messages = [
+                    {"role": "user", "content": base_content},
+                    {"role": "assistant", "content": sql},
+                    {"role": "user", "content": f"That didn't parse: {last_error}. Return only valid SQL."},
+                ]
+                continue
+            return sql
+        raise ValueError(f"SQL generation failed after {self.max_retries + 1} attempts: {last_error}")
