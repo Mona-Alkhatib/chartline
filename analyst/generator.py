@@ -118,10 +118,13 @@ class ChartGenerator:
             if sql.startswith("sql\n"):
                 sql = sql[4:]
             try:
-                sqlglot.parse_one(sql)
+                parsed = sqlglot.parse_one(sql)
+                if not isinstance(parsed, sqlglot.exp.Select):
+                    kind = type(parsed).__name__
+                    raise ValueError(f"Only SELECT statements are allowed; got {kind}")
             except Exception as e:
                 last_error = f"SQL parse error: {e}"
-                retry_msg = f"That didn't parse: {last_error}. Return only valid SQL."
+                retry_msg = f"That didn't parse: {last_error}. Return only a SELECT statement."
                 messages = [
                     {"role": "user", "content": base_content},
                     {"role": "assistant", "content": sql},

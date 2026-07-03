@@ -60,3 +60,22 @@ def test_text_to_sql_uses_opus():
     gen = ChartGenerator(Router(), Validator(), fake)
     gen.text_to_sql("q", _schema())
     assert fake.messages.create.call_args.kwargs["model"] == MODEL_OPUS
+
+
+def test_text_to_sql_rejects_non_select():
+    drop = "DROP TABLE users"
+    good = "SELECT COUNT(*) FROM users"
+    gen = ChartGenerator(Router(), Validator(), _fake_client([drop, good]))
+    result = gen.text_to_sql("count users", _schema())
+    assert result == good
+
+
+def test_text_to_sql_gives_up_on_persistent_non_select():
+    drop = "DELETE FROM users"
+    gen = ChartGenerator(Router(), Validator(), _fake_client([drop] * 4), max_retries=3)
+    try:
+        gen.text_to_sql("bad ask", _schema())
+        raised = False
+    except ValueError:
+        raised = True
+    assert raised
