@@ -2,7 +2,6 @@ import json
 import os
 from pathlib import Path
 
-import duckdb
 import pytest
 from anthropic import Anthropic
 from dotenv import load_dotenv
