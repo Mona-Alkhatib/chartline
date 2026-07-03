@@ -78,3 +78,21 @@ class ChartGenerator:
             f"User request: {user_ask}\n\n"
             f"Return a Vega-Lite v5 JSON spec. JSON only, starting with {{."
         )
+
+    def refine(
+        self, user_ask: str, previous: VegaLiteSpec, schema: SchemaSummary,
+    ) -> GenerationResult:
+        model = self.router.model_for("refine")
+        system_blocks = self.router.system_blocks("refine")
+        user_content = self._refine_user_content(user_ask, previous, schema)
+        return self._loop(model, system_blocks, user_content, schema, task="refine")
+
+    def _refine_user_content(
+        self, user_ask: str, previous: VegaLiteSpec, schema: SchemaSummary,
+    ) -> str:
+        return (
+            f"Dataset schema:\n{schema.to_prompt_text()}\n\n"
+            f"Current Vega-Lite spec:\n{json.dumps(previous.spec, indent=2)}\n\n"
+            f"User refinement: {user_ask}\n\n"
+            f"Return the modified Vega-Lite v5 JSON spec. JSON only, starting with {{."
+        )
