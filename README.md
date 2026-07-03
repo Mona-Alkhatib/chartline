@@ -33,6 +33,17 @@ s.refine("split by region")
 s.refine("log-scale the y-axis")
 ```
 
+## Configuration
+
+Chartline reads model IDs from environment variables. The defaults track
+current Anthropic model names; override them if you need to pin a specific
+snapshot or switch to a different tier:
+
+```bash
+export CHARTLINE_MODEL_OPUS=claude-opus-4-8       # initial chart + text-to-SQL
+export CHARTLINE_MODEL_SONNET=claude-sonnet-4-6   # refinements
+```
+
 ## Development
 
 ```bash

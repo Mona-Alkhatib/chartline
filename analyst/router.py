@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import os
 from typing import Literal
 
 Task = Literal["initial", "refine", "sql"]
 
-MODEL_OPUS = "claude-opus-4-8"
-MODEL_SONNET = "claude-sonnet-4-6"
+MODEL_OPUS = os.environ.get("CHARTLINE_MODEL_OPUS", "claude-opus-4-8")
+MODEL_SONNET = os.environ.get("CHARTLINE_MODEL_SONNET", "claude-sonnet-4-6")
 
 _INITIAL_PROMPT = """You are a data visualization assistant. Given a schema summary
 and a user's request, produce a Vega-Lite v5 JSON specification that answers it.
