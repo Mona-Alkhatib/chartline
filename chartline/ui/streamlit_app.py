@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 from chartline.exporter import to_altair, to_plotly
 from chartline.generator import ChartGenerator
+from chartline.models_types import VegaLiteSpec
 from chartline.renderer import render_streamlit
 from chartline.router import Router
 from chartline.session import Session
@@ -20,6 +21,21 @@ from chartline.store import SpecStore
 from chartline.validator import Validator
 
 load_dotenv()
+
+_SAMPLE_CSV = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "datasets" / "sales.csv"
+
+_SAMPLE_SPEC = VegaLiteSpec(spec={
+    "title": "Sample: revenue by region, split by product",
+    "mark": "bar",
+    "encoding": {
+        "x": {"field": "region", "type": "nominal", "title": "Region"},
+        "y": {
+            "aggregate": "sum", "field": "revenue",
+            "type": "quantitative", "title": "Total revenue",
+        },
+        "color": {"field": "product", "type": "nominal"},
+    },
+})
 
 
 def _store_path() -> Path:
@@ -35,6 +51,7 @@ def _init_state() -> None:
     st.session_state.setdefault("session_obj", None)
     st.session_state.setdefault("df", None)
     st.session_state.setdefault("history", [])
+    st.session_state.setdefault("demo_spec", None)
 
 
 def _load_source(uploaded) -> tuple[FileSource, pd.DataFrame]:
@@ -46,10 +63,20 @@ def _load_source(uploaded) -> tuple[FileSource, pd.DataFrame]:
     return source, source.load()
 
 
-def _make_session(source: FileSource) -> Session:
+def _make_session(source: FileSource) -> Session | None:
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        return None
     store = SpecStore(_store_path()).__enter__()
     generator = ChartGenerator(Router(), Validator(), _get_client())
     return Session.from_source(source, store, generator, name=source.path.name)
+
+
+def _load_sample() -> None:
+    source = FileSource(_SAMPLE_CSV)
+    st.session_state.df = source.load()
+    st.session_state.session_obj = _make_session(source)
+    st.session_state.demo_spec = _SAMPLE_SPEC
+    st.session_state.history = []
 
 
 def main() -> None:
@@ -57,11 +84,23 @@ def main() -> None:
     _init_state()
     st.title("Chartline")
 
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        st.warning(
+            "No `ANTHROPIC_API_KEY` set in `.env` or the shell. You can still explore "
+            "the layout and preview the sample chart. Chat asks will error until a key is added.",
+        )
+
     left, center, right = st.columns([1, 2, 1])
 
     with left:
         st.subheader("Data")
-        uploaded = st.file_uploader("Upload a CSV / Parquet / Excel file", type=["csv", "parquet", "xlsx"])
+        if st.button("Try the sample sales.csv", use_container_width=True):
+            _load_sample()
+            st.rerun()
+        uploaded = st.file_uploader(
+            "or upload a CSV / Parquet / Excel file",
+            type=["csv", "parquet", "xlsx"],
+        )
         if uploaded is not None and st.session_state.session_obj is None:
             source, df = _load_source(uploaded)
             st.session_state.session_obj = _make_session(source)
@@ -73,10 +112,17 @@ def main() -> None:
     with center:
         st.subheader("Chart")
         session = st.session_state.session_obj
+        demo_spec = st.session_state.demo_spec
+        active_spec = None
         if session is not None and session.current_spec is not None:
-            render_streamlit(session.current_spec, st.session_state.df)
+            active_spec = session.current_spec
+        elif demo_spec is not None:
+            active_spec = demo_spec
+
+        if active_spec is not None and st.session_state.df is not None:
+            render_streamlit(active_spec, st.session_state.df)
         else:
-            st.info("Upload data and ask for a chart to get started.")
+            st.info("Load the sample or upload data to see a chart here.")
 
     with right:
         st.subheader("Chat")
@@ -96,14 +142,20 @@ def main() -> None:
 
         st.divider()
         st.subheader("Export")
+        export_spec = None
         if session is not None and session.current_spec is not None:
+            export_spec = session.current_spec
+        elif st.session_state.demo_spec is not None:
+            export_spec = st.session_state.demo_spec
+
+        if export_spec is not None:
             fmt = st.selectbox("Format", ["Vega-Lite JSON", "Altair", "Plotly"])
             if fmt == "Vega-Lite JSON":
-                st.code(json.dumps(session.current_spec.spec, indent=2), language="json")
+                st.code(json.dumps(export_spec.spec, indent=2), language="json")
             elif fmt == "Altair":
-                st.code(to_altair(session.current_spec), language="python")
+                st.code(to_altair(export_spec), language="python")
             else:
-                st.code(to_plotly(session.current_spec), language="python")
+                st.code(to_plotly(export_spec), language="python")
 
 
 if __name__ == "__main__":
