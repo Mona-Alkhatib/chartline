@@ -24,18 +24,69 @@ load_dotenv()
 
 _SAMPLE_CSV = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "datasets" / "sales.csv"
 
-_SAMPLE_SPEC = VegaLiteSpec(spec={
-    "title": "Sample: revenue by region, split by product",
-    "mark": "bar",
-    "encoding": {
-        "x": {"field": "region", "type": "nominal", "title": "Region"},
-        "y": {
-            "aggregate": "sum", "field": "revenue",
-            "type": "quantitative", "title": "Total revenue",
+_DEMO_CHARTS: dict[str, VegaLiteSpec] = {
+    "Bar: revenue by region": VegaLiteSpec(spec={
+        "title": "Revenue by region",
+        "mark": "bar",
+        "encoding": {
+            "x": {"field": "region", "type": "nominal", "title": "Region"},
+            "y": {
+                "aggregate": "sum", "field": "revenue",
+                "type": "quantitative", "title": "Total revenue",
+            },
         },
-        "color": {"field": "product", "type": "nominal"},
-    },
-})
+    }),
+    "Stacked bar: revenue by region, split by product": VegaLiteSpec(spec={
+        "title": "Revenue by region, split by product",
+        "mark": "bar",
+        "encoding": {
+            "x": {"field": "region", "type": "nominal", "title": "Region"},
+            "y": {
+                "aggregate": "sum", "field": "revenue",
+                "type": "quantitative", "title": "Total revenue",
+            },
+            "color": {"field": "product", "type": "nominal"},
+        },
+    }),
+    "Line: revenue over time, by product": VegaLiteSpec(spec={
+        "title": "Revenue over time",
+        "mark": {"type": "line", "point": True},
+        "encoding": {
+            "x": {"field": "date", "type": "temporal", "title": "Date"},
+            "y": {
+                "aggregate": "sum", "field": "revenue",
+                "type": "quantitative", "title": "Revenue",
+            },
+            "color": {"field": "product", "type": "nominal"},
+        },
+    }),
+    "Scatter: units vs revenue, colored by region": VegaLiteSpec(spec={
+        "title": "Units vs revenue",
+        "mark": {"type": "point", "size": 120, "filled": True},
+        "encoding": {
+            "x": {"field": "units", "type": "quantitative", "title": "Units"},
+            "y": {"field": "revenue", "type": "quantitative", "title": "Revenue"},
+            "color": {"field": "region", "type": "nominal"},
+            "shape": {"field": "product", "type": "nominal"},
+        },
+    }),
+    "Heatmap: revenue by month and region": VegaLiteSpec(spec={
+        "title": "Revenue by month and region",
+        "mark": "rect",
+        "encoding": {
+            "x": {
+                "field": "date", "type": "ordinal", "timeUnit": "yearmonth",
+                "title": "Month",
+            },
+            "y": {"field": "region", "type": "nominal", "title": "Region"},
+            "color": {
+                "aggregate": "sum", "field": "revenue",
+                "type": "quantitative", "title": "Total revenue",
+            },
+        },
+    }),
+}
+_DEFAULT_DEMO = "Stacked bar: revenue by region, split by product"
 
 
 def _store_path() -> Path:
@@ -52,6 +103,7 @@ def _init_state() -> None:
     st.session_state.setdefault("df", None)
     st.session_state.setdefault("history", [])
     st.session_state.setdefault("demo_spec", None)
+    st.session_state.setdefault("demo_choice", _DEFAULT_DEMO)
 
 
 def _load_source(uploaded) -> tuple[FileSource, pd.DataFrame]:
@@ -75,7 +127,8 @@ def _load_sample() -> None:
     source = FileSource(_SAMPLE_CSV)
     st.session_state.df = source.load()
     st.session_state.session_obj = _make_session(source)
-    st.session_state.demo_spec = _SAMPLE_SPEC
+    st.session_state.demo_spec = _DEMO_CHARTS[_DEFAULT_DEMO]
+    st.session_state.demo_choice = _DEFAULT_DEMO
     st.session_state.history = []
 
 
@@ -108,6 +161,21 @@ def main() -> None:
         if st.session_state.df is not None:
             st.write("Preview")
             st.dataframe(st.session_state.df.head(10))
+
+        if st.session_state.df is not None:
+            st.divider()
+            st.write("**Demo gallery** (no API cost):")
+            picked = st.selectbox(
+                "Pick a chart",
+                list(_DEMO_CHARTS.keys()),
+                index=list(_DEMO_CHARTS.keys()).index(st.session_state.demo_choice),
+                key="demo_gallery_pick",
+                label_visibility="collapsed",
+            )
+            if picked != st.session_state.demo_choice:
+                st.session_state.demo_choice = picked
+                st.session_state.demo_spec = _DEMO_CHARTS[picked]
+                st.rerun()
 
     with center:
         st.subheader("Chart")
