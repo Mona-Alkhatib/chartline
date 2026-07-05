@@ -1,8 +1,12 @@
 # Chartline
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://chartline-nbhc9gfvtgnilkv5mjddq5.streamlit.app)
+
 Natural-language chart generation and refinement for ad-hoc analysis.
 
 Chartline turns questions like "show me revenue by region" into charts, and lets you refine them iteratively ("log-scale the y-axis," "split by product," "make it a bar chart") with the LLM producing surgical edits to a canonical Vega-Lite spec each time.
+
+**Try it live:** https://chartline-nbhc9gfvtgnilkv5mjddq5.streamlit.app. Click **"Try the sample sales.csv"**, then flip through the demo gallery. No API key required to preview.
 
 ## Features
 
@@ -14,7 +18,7 @@ Chartline turns questions like "show me revenue by region" into charts, and lets
 
 ## Preview without an API key
 
-If you just want to see what Chartline renders (no LLM calls, no cost):
+The fastest option is the hosted demo above. To run the same experience locally:
 
 ```bash
 uv sync
