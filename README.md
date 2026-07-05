@@ -6,7 +6,7 @@ Natural-language chart generation and refinement for ad-hoc analysis.
 
 Chartline turns questions like "show me revenue by region" into charts, and lets you refine them iteratively ("log-scale the y-axis," "split by product," "make it a bar chart") with the LLM producing surgical edits to a canonical Vega-Lite spec each time.
 
-**Try it live:** https://chartline-nbhc9gfvtgnilkv5mjddq5.streamlit.app. Click **"Try the sample sales.csv"**, then flip through the demo gallery. No API key required to preview.
+The [hosted demo](https://chartline-nbhc9gfvtgnilkv5mjddq5.streamlit.app) opens straight into a stacked bar over sample data. Flip through the demo gallery to see other chart types, or upload your own CSV. No API key required for preview.
 
 ## Features
 
@@ -25,7 +25,7 @@ uv sync
 uv run streamlit run chartline/ui/streamlit_app.py
 ```
 
-Open http://localhost:8501, click **"Try the sample sales.csv"**, then pick from the **Demo gallery** dropdown to flip between bar, stacked bar, line, scatter, and heatmap views of the sample dataset. The right-hand panel also shows the corresponding Vega-Lite JSON, Altair, and Plotly code for whichever chart is on screen.
+Open http://localhost:8501. The sample dataset and a starter chart load automatically. Flip through the **Demo gallery** dropdown to see bar, stacked bar, line, scatter, and heatmap views of the same data, and check the right-hand panel for the corresponding Vega-Lite JSON, Altair, and Plotly code.
 
 The chat panel still needs `ANTHROPIC_API_KEY` for new asks and refinements, but the demo gallery and code export work offline.
 

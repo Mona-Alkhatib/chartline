@@ -104,6 +104,12 @@ def _init_state() -> None:
     st.session_state.setdefault("history", [])
     st.session_state.setdefault("demo_spec", None)
     st.session_state.setdefault("demo_choice", _DEFAULT_DEMO)
+    st.session_state.setdefault("is_sample", False)
+    st.session_state.setdefault("last_upload_id", None)
+    st.session_state.setdefault("bootstrapped", False)
+    if not st.session_state.bootstrapped:
+        _load_sample()
+        st.session_state.bootstrapped = True
 
 
 def _load_source(uploaded) -> tuple[FileSource, pd.DataFrame]:
@@ -130,6 +136,7 @@ def _load_sample() -> None:
     st.session_state.demo_spec = _DEMO_CHARTS[_DEFAULT_DEMO]
     st.session_state.demo_choice = _DEFAULT_DEMO
     st.session_state.history = []
+    st.session_state.is_sample = True
 
 
 def main() -> None:
@@ -147,22 +154,28 @@ def main() -> None:
 
     with left:
         st.subheader("Data")
-        if st.button("Try the sample sales.csv", use_container_width=True):
+        if st.button("Reset to sample data", use_container_width=True):
             _load_sample()
             st.rerun()
         uploaded = st.file_uploader(
-            "or upload a CSV / Parquet / Excel file",
+            "or upload your own CSV / Parquet / Excel file",
             type=["csv", "parquet", "xlsx"],
         )
-        if uploaded is not None and st.session_state.session_obj is None:
-            source, df = _load_source(uploaded)
-            st.session_state.session_obj = _make_session(source)
-            st.session_state.df = df
+        if uploaded is not None:
+            file_id = f"{uploaded.name}-{uploaded.size}"
+            if st.session_state.last_upload_id != file_id:
+                source, df = _load_source(uploaded)
+                st.session_state.session_obj = _make_session(source)
+                st.session_state.df = df
+                st.session_state.demo_spec = None
+                st.session_state.is_sample = False
+                st.session_state.last_upload_id = file_id
+                st.rerun()
         if st.session_state.df is not None:
             st.write("Preview")
             st.dataframe(st.session_state.df.head(10))
 
-        if st.session_state.df is not None:
+        if st.session_state.is_sample:
             st.divider()
             st.write("**Demo gallery** (no API cost):")
             picked = st.selectbox(
