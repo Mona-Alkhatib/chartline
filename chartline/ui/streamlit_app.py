@@ -29,18 +29,22 @@ _DEMO_CHARTS: dict[str, VegaLiteSpec] = {
         "title": "Revenue by region",
         "mark": "bar",
         "encoding": {
-            "x": {"field": "region", "type": "nominal", "title": "Region"},
+            "x": {
+                "field": "region", "type": "nominal", "title": "Region",
+                "sort": "-y",
+            },
             "y": {
                 "aggregate": "sum", "field": "revenue",
                 "type": "quantitative", "title": "Total revenue",
             },
         },
     }),
-    "Stacked bar: revenue by region, split by product": VegaLiteSpec(spec={
-        "title": "Revenue by region, split by product",
+    "Grouped bar: revenue by region and product": VegaLiteSpec(spec={
+        "title": "Revenue by region and product",
         "mark": "bar",
         "encoding": {
             "x": {"field": "region", "type": "nominal", "title": "Region"},
+            "xOffset": {"field": "product", "type": "nominal"},
             "y": {
                 "aggregate": "sum", "field": "revenue",
                 "type": "quantitative", "title": "Total revenue",
@@ -86,7 +90,7 @@ _DEMO_CHARTS: dict[str, VegaLiteSpec] = {
         },
     }),
 }
-_DEFAULT_DEMO = "Stacked bar: revenue by region, split by product"
+_DEFAULT_DEMO = "Bar: revenue by region"
 
 
 def _store_path() -> Path:
@@ -235,9 +239,7 @@ def main() -> None:
                 "- **Refine** the current one: *\"log-scale the y-axis\"*, "
                 "*\"split by product\"*\n"
                 "- **Query a warehouse** in plain English via text-to-SQL "
-                "(DuckDB, Postgres, Snowflake, BigQuery).\n\n"
-                "To try it, clone the repo, set `ANTHROPIC_API_KEY`, and run "
-                "`uv run chartline serve`."
+                "(DuckDB, Postgres, Snowflake, BigQuery)."
             )
 
         st.divider()
