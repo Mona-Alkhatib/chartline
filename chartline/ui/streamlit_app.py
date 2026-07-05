@@ -144,16 +144,33 @@ def main() -> None:
     _init_state()
     st.title("Chartline")
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
+    has_key = bool(os.environ.get("ANTHROPIC_API_KEY"))
+
+    if not has_key:
         st.info(
-            "**Demo mode.** Sample data is preloaded and chat with the LLM is disabled. "
-            "Use the demo gallery on the left to preview chart types, or upload your own "
-            "CSV to see how the schema and export code respond."
+            "**Demo mode.** Sample data is preloaded and chat is disabled. "
+            "Pick a chart type from the gallery on the left, or upload your own CSV "
+            "to see how Chartline reads a schema and exports code."
         )
 
     left, center, right = st.columns([1, 2, 1])
 
     with left:
+        if st.session_state.is_sample:
+            st.subheader("Demo gallery")
+            picked = st.radio(
+                "Sample chart types",
+                list(_DEMO_CHARTS.keys()),
+                index=list(_DEMO_CHARTS.keys()).index(st.session_state.demo_choice),
+                key="demo_gallery_pick",
+                label_visibility="collapsed",
+            )
+            if picked != st.session_state.demo_choice:
+                st.session_state.demo_choice = picked
+                st.session_state.demo_spec = _DEMO_CHARTS[picked]
+                st.rerun()
+            st.divider()
+
         st.subheader("Data")
         if st.button("Reset to sample data", use_container_width=True):
             _load_sample()
@@ -176,21 +193,6 @@ def main() -> None:
             st.write("Preview")
             st.dataframe(st.session_state.df.head(10))
 
-        if st.session_state.is_sample:
-            st.divider()
-            st.write("**Demo gallery** (no API cost):")
-            picked = st.selectbox(
-                "Pick a chart",
-                list(_DEMO_CHARTS.keys()),
-                index=list(_DEMO_CHARTS.keys()).index(st.session_state.demo_choice),
-                key="demo_gallery_pick",
-                label_visibility="collapsed",
-            )
-            if picked != st.session_state.demo_choice:
-                st.session_state.demo_choice = picked
-                st.session_state.demo_spec = _DEMO_CHARTS[picked]
-                st.rerun()
-
     with center:
         st.subheader("Chart")
         session = st.session_state.session_obj
@@ -207,20 +209,36 @@ def main() -> None:
             st.info("Load the sample or upload data to see a chart here.")
 
     with right:
-        st.subheader("Chat")
         session = st.session_state.session_obj
-        for entry in st.session_state.history:
-            role = "You" if entry["role"] == "user" else "Chartline"
-            st.markdown(f"**{role}:** {entry['text']}")
-        prompt = st.chat_input("Describe or refine a chart")
-        if prompt and session is not None:
-            st.session_state.history.append({"role": "user", "text": prompt})
-            spec = session.ask(prompt) if session.current_spec is None else session.refine(prompt)
-            marker = spec.spec.get("mark")
-            st.session_state.history.append(
-                {"role": "assistant", "text": f"Updated. mark={marker}"}
+        if has_key:
+            st.subheader("Chat")
+            for entry in st.session_state.history:
+                role = "You" if entry["role"] == "user" else "Chartline"
+                st.markdown(f"**{role}:** {entry['text']}")
+            prompt = st.chat_input("Describe or refine a chart")
+            if prompt and session is not None:
+                st.session_state.history.append({"role": "user", "text": prompt})
+                if session.current_spec is None:
+                    spec = session.ask(prompt)
+                else:
+                    spec = session.refine(prompt)
+                marker = spec.spec.get("mark")
+                st.session_state.history.append(
+                    {"role": "assistant", "text": f"Updated. mark={marker}"}
+                )
+                st.rerun()
+        else:
+            st.subheader("What chat does")
+            st.markdown(
+                "In the full app, this panel talks to Claude:\n\n"
+                "- **Ask** for a new chart: *\"revenue by region as a line chart\"*\n"
+                "- **Refine** the current one: *\"log-scale the y-axis\"*, "
+                "*\"split by product\"*\n"
+                "- **Query a warehouse** in plain English via text-to-SQL "
+                "(DuckDB, Postgres, Snowflake, BigQuery).\n\n"
+                "To try it, clone the repo, set `ANTHROPIC_API_KEY`, and run "
+                "`uv run chartline serve`."
             )
-            st.rerun()
 
         st.divider()
         st.subheader("Export")
