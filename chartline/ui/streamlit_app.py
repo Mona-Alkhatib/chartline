@@ -145,9 +145,10 @@ def main() -> None:
     st.title("Chartline")
 
     if not os.environ.get("ANTHROPIC_API_KEY"):
-        st.warning(
-            "No `ANTHROPIC_API_KEY` set in `.env` or the shell. You can still explore "
-            "the layout and preview the sample chart. Chat asks will error until a key is added.",
+        st.info(
+            "**Demo mode.** Sample data is preloaded and chat with the LLM is disabled. "
+            "Use the demo gallery on the left to preview chart types, or upload your own "
+            "CSV to see how the schema and export code respond."
         )
 
     left, center, right = st.columns([1, 2, 1])
